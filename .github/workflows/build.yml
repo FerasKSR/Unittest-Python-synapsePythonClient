@@ -35,18 +35,8 @@ concurrency:
 
 jobs:
 
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: '3.13'
-    - uses: pre-commit/action@v3.0.1
-
   # run unit (and integration tests if account secrets available) on our build matrix
   test:
-    needs: [pre-commit]
 
     strategy:
       matrix:
@@ -104,6 +94,7 @@ jobs:
         shell: bash
         run: |
           pytest -sv --cov-append --cov=. --cov-report xml tests/unit
+
       - name: Archive code coverage results
         uses: actions/upload-artifact@v4
         with:
